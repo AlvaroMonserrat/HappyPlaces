@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomNoActionBarTheme" parent="@style/Theme.HappyPlacesNoActionBar">
+        <item name="android:statusBarColor">@color/rose_dark</item>
+    </style>
+    <style name="CustomToolBarStyle">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="colorControlNormal">#FFFFFF</item>
+    </style>
+</resources>

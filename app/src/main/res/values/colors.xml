@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!--Color Project https://digitalsynopsis.com/design/color-schemes-palettes-combinations/-->
+    <color name="rose_dark">#F14666</color>
+    <color name="rose_super_dark">#F53F16</color>
+    <color name="yellow_soft">#12CC9A</color>
+    <color name="green_soft">#9CB898</color>
+
+
+    <!--START-->
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#9AA2AF</color>
+    <color name="white_color">#FFFFFF</color>
+    <color name="button_background_color">#63ace5</color>
+    <!--END-->
+
+</resources>
