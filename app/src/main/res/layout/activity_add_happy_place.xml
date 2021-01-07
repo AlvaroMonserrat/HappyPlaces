@@ -31,7 +31,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="8dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TextInputTitle"
@@ -47,7 +47,7 @@
                     android:id="@+id/editTextTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Title"
+                    android:hint="@string/title"
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
@@ -72,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:hint="Description"
+                    android:hint="@string/description"
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
@@ -95,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:hint="Date"
+                    android:hint="@string/date"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:inputType="text"
@@ -120,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:hint="Location"
+                    android:hint="@string/location"
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
@@ -149,7 +149,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:padding="@dimen/add_screen_text_add_image_padding"
-                android:text="ADD IMAGE"
+                android:text="@string/add_image"
                 android:textColor="@color/rose_super_dark"
                 android:textSize="@dimen/add_screen_text_add_image_textSize"
                 android:textStyle="bold"
@@ -169,7 +169,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
                 android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
-                android:text="Save"
+                android:text="@string/save"
                 android:textColor="@color/white_color"
                 android:textSize="@dimen/btn_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
