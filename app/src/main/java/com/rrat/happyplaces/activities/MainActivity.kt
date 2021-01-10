@@ -1,4 +1,4 @@
-package com.rrat.happyplaces
+package com.rrat.happyplaces.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

@@ -1,9 +1,11 @@
-package com.rrat.happyplaces
+package com.rrat.happyplaces.activities
 
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.karumi.dexter.Dexter
@@ -20,13 +23,16 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.rrat.happyplaces.R
+import com.rrat.happyplaces.database.DatabaseHandler
 import com.rrat.happyplaces.databinding.ActivityAddHappyPlaceBinding
-import com.rrat.happyplaces.databinding.ActivityMainBinding
+import com.rrat.happyplaces.models.HappyPlaceModel
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.Exception
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.jar.Manifest
 
 class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -34,6 +40,9 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     private var calendar = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
+    private var saveImageToInternalStorage : Uri? = null
+    private var mLatitude : Double = 0.0
+    private var mLongitude : Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,9 +67,10 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
             updateDateInView()
         }
+        updateDateInView()
         binding.editTextDate.setOnClickListener(this)
-
         binding.textViewAddImage.setOnClickListener(this)
+        binding.buttonSave.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -89,6 +99,46 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
                 pictureDialog.show()
+            }
+            R.id.buttonSave->{
+
+                when{
+                    binding.editTextTitle.text.isNullOrEmpty()->{
+                        Toast.makeText(this, "Please enter title", Toast.LENGTH_SHORT).show()
+                    }
+                    binding.editTextDescription.text.isNullOrEmpty()->{
+                        Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show()
+                    }
+                    binding.editTextLocation.text.isNullOrEmpty()->{
+                        Toast.makeText(this, "Please enter a location", Toast.LENGTH_SHORT).show()
+                    }
+                    saveImageToInternalStorage == null ->{
+                        Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+                    }else ->{
+                        val happyPlaceModel = HappyPlaceModel(
+                                0,
+                                binding.editTextTitle.text.toString(),
+                                saveImageToInternalStorage.toString(),
+                                binding.editTextDescription.text.toString(),
+                                binding.editTextDate.text.toString(),
+                                binding.editTextLocation.text.toString(),
+                                mLatitude,
+                                mLongitude
+                        )
+
+                        val databaseHandler = DatabaseHandler(this)
+                        val result = databaseHandler.addHappyPlace(happyPlaceModel)
+                        if(result > 0){
+                            Toast.makeText(this,
+                                    "The happy place details are inserted successfully",
+                                    Toast.LENGTH_SHORT
+                            ).show()
+                            finish()
+                        }
+                    }
+                }
+
+
             }
         }
     }
@@ -151,10 +201,15 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                                     this.contentResolver,
                                     contentURI
                             )
+                            saveImageToInternalStorage = saveImageToInternalStorage(bitmap)
+                            Log.i("Save Image",  "Path :: $saveImageToInternalStorage")
                             binding.ImageViewPlaceImage.setImageBitmap(bitmap)
+
                         } else {
                             val source = ImageDecoder.createSource(this.contentResolver, contentURI!!)
                             val bitmap = ImageDecoder.decodeBitmap(source)
+                            saveImageToInternalStorage = saveImageToInternalStorage(bitmap)
+                            Log.i("Save Image",  "Path :: $saveImageToInternalStorage")
                             binding.ImageViewPlaceImage.setImageBitmap(bitmap)
                         }
 
@@ -165,6 +220,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }else if(requestCode == CAMERA){
                 val thumbnail : Bitmap = data!!.extras!!.get("data") as Bitmap
+                saveImageToInternalStorage = saveImageToInternalStorage(thumbnail)
+                Log.i("Save Image",  "Path :: $saveImageToInternalStorage")
                 binding.ImageViewPlaceImage.setImageBitmap(thumbnail)
 
             }
@@ -199,9 +256,30 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         binding.editTextDate.setText(sdf.format(calendar.time).toString())
     }
 
+
+    private fun saveImageToInternalStorage(bitmap: Bitmap): Uri{
+        val wrapper = ContextWrapper(applicationContext)
+        var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush()
+            stream.close()
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+
+        return Uri.parse(file.absolutePath)
+
+    }
+
+
     companion object{
         private const val GALLERY = 1
         private const val CAMERA = 2
+        private const val IMAGE_DIRECTORY = "HappyPlacesImages"
     }
 }
 
