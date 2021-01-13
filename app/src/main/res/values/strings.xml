@@ -7,4 +7,6 @@
     <string name="location">Location</string>
     <string name="add_image">ADD IMAGE</string>
     <string name="save">Save</string>
+    <string name="no_hay_lugares_que_mostrar">No hay Lugares que Mostrar</string>
+    <string name="image">Image</string>
 </resources>
