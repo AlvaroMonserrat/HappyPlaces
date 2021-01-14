@@ -1,5 +1,6 @@
 package com.rrat.happyplaces.activities
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.fabAddHappyPlace.setOnClickListener {
             val intent = Intent(this, AddHappyPlaceActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, HAPPY_PLACES_RESULT)
         }
         getHappyPlacesListFromLocalDB()
     }
@@ -34,6 +35,13 @@ class MainActivity : AppCompatActivity() {
 
         val placesAdapter = HappyPlacesAdapter(this, happyPlaceList)
         binding.recyclerViewPlaceList.adapter = placesAdapter
+
+        placesAdapter.setOnClickListener(object : HappyPlacesAdapter.OnClickListener{
+            override fun onClick(position: Int, model: HappyPlaceModel) {
+                val intent = Intent(this@MainActivity, HappyPlaceDetailActivity::class.java)
+                startActivity(intent)
+            }
+        })
 
     }
 
@@ -49,5 +57,20 @@ class MainActivity : AppCompatActivity() {
             binding.recyclerViewPlaceList.visibility = View.GONE
             binding.textViewNoRecords.visibility = View.VISIBLE
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == HAPPY_PLACES_RESULT){
+            if(resultCode == Activity.RESULT_OK){
+                getHappyPlacesListFromLocalDB()
+            }else{
+                Log.i("Activity", "Cancelled or Back pressed")
+            }
+        }
+    }
+
+    companion object{
+        private const val HAPPY_PLACES_RESULT = 1
     }
 }

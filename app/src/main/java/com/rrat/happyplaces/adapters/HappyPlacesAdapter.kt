@@ -16,10 +16,16 @@ open class HappyPlacesAdapter(
 
     lateinit var binding: ItemPlaceHappyBinding
 
+    private var onClickListener: OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         binding = ItemPlaceHappyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)    }
+
+
+    fun setOnClickListener(onClickListener: OnClickListener){
+        this.onClickListener = onClickListener
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model: HappyPlaceModel = list[position]
@@ -28,6 +34,13 @@ open class HappyPlacesAdapter(
             holder.itemImageViewCircle.setImageURI(Uri.parse(model.image))
             holder.itemTextViewTitle.text = model.title
             holder.itemTextViewDescription.text = model.description
+
+        }
+
+        holder.itemView.setOnClickListener{
+            if(onClickListener != null){
+                onClickListener!!.onClick(position, model)
+            }
         }
     }
 
@@ -35,10 +48,17 @@ open class HappyPlacesAdapter(
         return list.size
     }
 
+
     private class MyViewHolder(private val binding: ItemPlaceHappyBinding) : RecyclerView.ViewHolder(binding.root){
         val layoutMain = binding.mainLayoutItem
         val itemTextViewTitle = binding.itemTextViewTitle
         val itemTextViewDescription = binding.itemTextViewDescription
         val itemImageViewCircle = binding.imageViewCircle
     }
+
+
+    interface OnClickListener{
+        fun onClick(position: Int, model: HappyPlaceModel)
+    }
+
 }
