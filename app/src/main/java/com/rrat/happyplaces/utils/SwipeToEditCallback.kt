@@ -1,10 +1,7 @@
 package com.rrat.happyplaces.utils
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuffXfermode
+import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -18,7 +15,7 @@ abstract class SwipeToEditCallback(context: Context) : ItemTouchHelper.SimpleCal
     private val intrinsicHeight = editIcon!!.intrinsicHeight
     private val background = ColorDrawable()
     private val backgroundColor = Color.parseColor("#24AE05")
-    private val clearPaint = Paint().apply{ xfermode = PorterDuffXfermode()}
+    private val clearPaint = Paint().apply{ xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)}
 
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
@@ -43,28 +40,40 @@ abstract class SwipeToEditCallback(context: Context) : ItemTouchHelper.SimpleCal
     ) {
         val itemView = viewHolder.itemView
         val itemHeight = itemView.bottom - itemView.top
+        val isCanceled = dX == 0f && !isCurrentActive
 
-        // Draw the red delete background
+
+        if(isCanceled){
+            clearCanvas(c, itemView.right + dX, itemView.top.toFloat(), itemView.right.toFloat(), itemView.bottom.toFloat())
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentActive)
+            return
+        }
+
+        // Draw the color edit background
         background.color = backgroundColor
         background.setBounds(
-                itemView.right + dX.toInt(),
+                itemView.left + dX.toInt(),
                 itemView.top,
-                itemView.right,
+                itemView.left,
                 itemView.bottom
         )
         background.draw(c)
 
-        // Calculate position of delete icon
+        // Calculate position of edit icon
         val iconTop = itemView.top + (itemHeight - intrinsicHeight) / 2
-        val iconMargin = (itemHeight - intrinsicHeight) / 2
-        val iconLeft = itemView.right - iconMargin - intrinsicWidth
-        val iconRight = itemView.right - iconMargin
+        val iconMargin = (itemHeight - intrinsicHeight)
+        val iconLeft = itemView.left + iconMargin - intrinsicWidth
+        val iconRight = itemView.left + iconMargin
         val iconBottom = iconTop + intrinsicHeight
 
-        // Draw the delete icon
-        editIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+        // Draw the edit icon
+        editIcon!!.setBounds(iconLeft, iconTop, iconRight, iconBottom)
         editIcon.draw(c)
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentActive)
+    }
+
+    private fun clearCanvas(c: Canvas?, left: Float, top: Float, right:Float, bottom: Float){
+        c?.drawRect(left, top, right, bottom, clearPaint)
     }
 }

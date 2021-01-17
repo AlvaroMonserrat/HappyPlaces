@@ -6,11 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.rrat.happyplaces.adapters.HappyPlacesAdapter
 import com.rrat.happyplaces.database.DatabaseHandler
 import com.rrat.happyplaces.databinding.ActivityMainBinding
 import com.rrat.happyplaces.models.HappyPlaceModel
+import com.rrat.happyplaces.utils.SwipeToEditCallback
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,6 +46,16 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+
+        val editSwipeHandler = object : SwipeToEditCallback(this){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = binding.recyclerViewPlaceList.adapter as HappyPlacesAdapter
+                adapter.notifyEditItem(this@MainActivity, viewHolder.adapterPosition, HAPPY_PLACES_RESULT)
+            }
+        }
+
+        val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
+        editItemTouchHelper.attachToRecyclerView(binding.recyclerViewPlaceList)
 
     }
 

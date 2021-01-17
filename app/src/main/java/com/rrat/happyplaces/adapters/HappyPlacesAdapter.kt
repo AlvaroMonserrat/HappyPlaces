@@ -1,11 +1,15 @@
 package com.rrat.happyplaces.adapters
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.rrat.happyplaces.activities.AddHappyPlaceActivity
+import com.rrat.happyplaces.activities.MainActivity
 import com.rrat.happyplaces.databinding.ItemPlaceHappyBinding
 import com.rrat.happyplaces.models.HappyPlaceModel
 
@@ -42,6 +46,14 @@ open class HappyPlacesAdapter(
                 onClickListener!!.onClick(position, model)
             }
         }
+    }
+
+
+    fun notifyEditItem(activity: Activity, position: Int, requestCode: Int){
+        val intent = Intent(context, AddHappyPlaceActivity::class.java)
+        intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS, list[position])
+        activity.startActivityForResult(intent, requestCode)
+        notifyItemChanged(position)
     }
 
     override fun getItemCount(): Int {
