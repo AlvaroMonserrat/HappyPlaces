@@ -18,6 +18,11 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -31,6 +36,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -61,6 +67,11 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         binding.toolbarAddPlace.setNavigationOnClickListener {
             onBackPressed()
         }
+
+        if(!Places.isInitialized()){
+            Places.initialize(this@AddHappyPlaceActivity, resources.getString(R.string.google_maps_api_key))
+        }
+
 
         if(intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)){
             mHappyPlaceDetails = intent.getSerializableExtra(MainActivity.EXTRA_PLACE_DETAILS) as HappyPlaceModel
@@ -96,6 +107,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         binding.editTextDate.setOnClickListener(this)
         binding.textViewAddImage.setOnClickListener(this)
         binding.buttonSave.setOnClickListener(this)
+        binding.editTextLocation.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -172,6 +184,18 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
 
+            }
+            R.id.editTextLocation ->{
+                try {
+                    val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS)
+
+                    val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                        .build(this@AddHappyPlaceActivity)
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }
             }
         }
     }
@@ -257,6 +281,11 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                 Log.i("Save Image",  "Path :: $saveImageToInternalStorage")
                 binding.ImageViewPlaceImage.setImageBitmap(thumbnail)
 
+            }else if(requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE){
+                val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+                binding.editTextLocation.setText(place.address)
+                mLatitude = place.latLng!!.latitude
+                mLongitude = place.latLng!!.longitude
             }
         }
     }
@@ -313,6 +342,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         private const val GALLERY = 1
         private const val CAMERA = 2
         private const val IMAGE_DIRECTORY = "HappyPlacesImages"
+        private const val PLACE_AUTOCOMPLETE_REQUEST_CODE = 3
     }
 }
 

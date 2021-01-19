@@ -120,11 +120,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:hint="@string/location"
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
                     android:textSize="22sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatImageView
