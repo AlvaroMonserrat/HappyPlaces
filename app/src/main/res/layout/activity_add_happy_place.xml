@@ -51,7 +51,7 @@
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -76,7 +76,7 @@
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -101,7 +101,7 @@
                     android:inputType="text"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -126,8 +126,26 @@
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textViewSelectCurrentLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_image_view_border"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="SELECT CURRENT LOCATION"
+                android:textColor="@color/rose_dark"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TextInputLocation">
+
+            </TextView>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ImageViewPlaceImage"
@@ -141,7 +159,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/TextInputLocation"/>
+                app:layout_constraintTop_toBottomOf="@id/textViewSelectCurrentLocation"/>
 
             <TextView
                 android:id="@+id/textViewAddImage"
