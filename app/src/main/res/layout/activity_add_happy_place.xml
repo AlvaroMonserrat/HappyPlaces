@@ -51,7 +51,7 @@
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -76,7 +76,7 @@
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -101,7 +101,7 @@
                     android:inputType="text"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -126,7 +126,7 @@
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -183,7 +183,7 @@
                 android:id="@+id/buttonSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity = "center"
+                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
                 android:background="@drawable/shape_button_rounded"
                 android:gravity="center"
@@ -192,10 +192,11 @@
                 android:text="@string/save"
                 android:textColor="@color/white_color"
                 android:textSize="@dimen/btn_text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ImageViewPlaceImage"
-                />
+                app:layout_constraintVertical_bias="0.493" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
