@@ -38,6 +38,7 @@ import com.rrat.happyplaces.R
 import com.rrat.happyplaces.database.DatabaseHandler
 import com.rrat.happyplaces.databinding.ActivityAddHappyPlaceBinding
 import com.rrat.happyplaces.models.HappyPlaceModel
+import com.rrat.happyplaces.utils.GetAddressFromLatLng
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -245,7 +246,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData(){
-        var mLocationRequest = LocationRequest()
+        val mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         mLocationRequest.interval = 1000
         mLocationRequest.numUpdates = 1
@@ -260,17 +261,32 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             mLatitude = mLastLocation.latitude
             Log.i("Current Latitude", "$mLatitude")
             mLongitude = mLastLocation.longitude
-            Log.i("Current Latitude", "$mLongitude")
+            Log.i("Current Longitude", "$mLongitude")
 
-            super.onLocationResult(locationRestult)
+            val addressTask = GetAddressFromLatLng(this@AddHappyPlaceActivity, mLatitude, mLongitude)
+
+            addressTask.setAddressListener(object : GetAddressFromLatLng.AddressListener{
+                override fun onAddressFound(address: String?) {
+                    Log.i("Address ::", "" + address)
+                    binding.editTextLocation.setText(address)
+                }
+
+                override fun onError() {
+                    Log.i("Get Address ::", "Something is wrong...")
+                }
+
+            })
+
+            addressTask.getAddressFromGeoCode()
+            //super.onLocationResult(locationRestult)
         }
     }
 
     private fun takePhotoFromCamera(){
         Dexter.withContext(this).withPermissions(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
         ).withListener(object: MultiplePermissionsListener{
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                 if(report!!.areAllPermissionsGranted()){
@@ -291,8 +307,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun choosePhotoFromGallery(){
         Dexter.withContext(this).withPermissions(
-            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
         ).withListener(object: MultiplePermissionsListener{
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                 if(report!!.areAllPermissionsGranted()){
